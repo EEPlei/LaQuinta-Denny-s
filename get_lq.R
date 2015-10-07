@@ -18,5 +18,3 @@ hotel_url = html_nodes(file, "#hotelListing .col-sm-12 a") %>%
 for(url in hotel_url){
   download.file(url, destfile = paste0("data/lq/", basename(url)))
 }
-
-
