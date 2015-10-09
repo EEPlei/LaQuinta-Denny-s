@@ -1,23 +1,36 @@
 library(rvest)
 library(stringr)
-library(magrittr)
-
-dir.create("data/lq/main/", recursive = TRUE, showWarnings = FALSE)
 
 base_url = "http://www.lq.com"
 listing_page = "/en/findandbook/hotel-listings.html"
 
-download.file(paste(base_url, listing_page, sep = ""),
-              destfile = "data/lq/main/listings.html")
+listings = read_html(paste0(base_url, listing_page))
 
-file = read_html("data/lq/main/listings.html")
-
-hotel_url = html_nodes(file, "#hotelListing .col-sm-12 a") %>%
-  html_attr("href") %>%
-  . [!is.na(.)] %>%
-  paste0(base_url, .) %>%
-  head(n = 5)
-
-for(url in hotel_url){
-  download.file(url, destfile = paste0("data/lq/", basename(url)))
+get_state_hotels = function(html, states, base_url, out_dir = "data/lq/")
+{
+  for(state in states)
+  {
+    dir.create(out_dir, recursive = TRUE, showWarnings = FALSE)
+    
+    hotels = html_nodes(html, "#hotelListing a")
+    
+    # Find the start of a state's hotels by finding its name in the node text
+    # +2 to skip State and Back to Top anchor tags
+    start = 2+which(html_text(hotels) %>% str_trim() %in% paste("Hotels in", state))
+    stopifnot(length(start) == 1)
+    
+    # State label anchor have no href result in NA
+    urls = html_attr(hotels, "href")
+    label_index = which(is.na(urls))
+    end = label_index[label_index > start] %>% min() - 1
+    
+    for(url in urls[start:end])
+    {
+      download.file(paste0(base_url,url),
+                    destfile = paste0(out_dir,basename(url)),
+                    quiet = TRUE)
+    }
+  }
 }
+
+get_state_hotels(listings, state, base_url)
