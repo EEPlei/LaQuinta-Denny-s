@@ -1,0 +1,13 @@
+---
+title: "HW 2"
+author: "Team 4 - Duke Dinosaurs"
+output: pdf_document
+---
+
+#La Quinta# 
+
+#Denny's#
+
+
+#Distance Analysis# 
+
