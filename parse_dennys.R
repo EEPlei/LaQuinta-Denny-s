@@ -12,6 +12,7 @@ for(file in files)
     uid = xml_nodes(x,"uid") %>% xml_text()
   )
   
+
   df$Name <- xml_nodes(x, "name") %>% xml_text()
   df$Address1 <- xml_nodes(x,"address1") %>% xml_text()
   df$Address2 <- xml_nodes(x, "address2") %>% xml_text()
