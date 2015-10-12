@@ -1,11 +1,7 @@
 files = dir("data/lq/",pattern = "*.html",full.names = TRUE)
 
-
-for(file in files)
-{
-  html = read_html(file)
-  
-<<<<<<< HEAD
+extract_data <- function(files){  
+  mydf <- NULL
   for(file in files)
   {
     lq_data = data.frame(Address = NA, City = NA, 
@@ -36,15 +32,9 @@ for(file in files)
     lq_data$Latitude = str_extract_all(lat_long,"[0-9-.]{4,}")[[1]][1]
     lq_data$Longitude = str_extract_all(lat_long,"[0-9-.]{4,}")[[1]][2]
     
-    
-    lq_df <- rbind(lq_data)
+    lq_df <- rbind(mydf, lq_data)
   }
   return(lq_df)
 }
 
-=======
-  addr = html_nodes(html, ".hotelDetailsBasicInfoTitle p") %>% html_text()
-  
-  lat_long = html_nodes(html, ".minimap") %>% html_attr("src")
-}
->>>>>>> 866fde89bdea2ebb1ed97d39973a14de0ca89e38
+
