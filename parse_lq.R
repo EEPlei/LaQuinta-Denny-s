@@ -1,7 +1,11 @@
 files = dir("data/lq/",pattern = "*.html",full.names = TRUE)
 
-extract_data = function(files){
+
+for(file in files)
+{
+  html = read_html(file)
   
+<<<<<<< HEAD
   for(file in files)
   {
     lq_data = data.frame(Address = NA, City = NA, 
@@ -38,3 +42,9 @@ extract_data = function(files){
   return(lq_df)
 }
 
+=======
+  addr = html_nodes(html, ".hotelDetailsBasicInfoTitle p") %>% html_text()
+  
+  lat_long = html_nodes(html, ".minimap") %>% html_attr("src")
+}
+>>>>>>> 866fde89bdea2ebb1ed97d39973a14de0ca89e38
