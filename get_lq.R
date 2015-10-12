@@ -6,6 +6,9 @@ listing_page = "/en/findandbook/hotel-listings.html"
 
 listings = read_html(paste0(base_url, listing_page))
 
+list_of_States <- read.table("lq_states.csv", header = FALSE)
+state <- as.factor(unlist(list_of_States))
+
 get_state_hotels = function(html, states, base_url, out_dir = "data/lq/")
 {
   for(state in states)
@@ -29,6 +32,7 @@ get_state_hotels = function(html, states, base_url, out_dir = "data/lq/")
       download.file(paste0(base_url,url),
                     destfile = paste0(out_dir,basename(url)),
                     quiet = TRUE)
+      Sys.sleep(5)
     }
   }
 }

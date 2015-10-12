@@ -1,8 +1,8 @@
 ---
 ---
-#HW 2#
+#HW 2 - La Quinta is Spanish for next to Denny's#
 ##Team 4 - Duke Dinosaurs##
-##October 14, 2015##
+##Due Date - October 14, 2015##
 
 ###La Quinta###
 ####Purpose####
@@ -13,7 +13,7 @@ Scraping all La Quinta locations from their website. Including details such as l
 ###Denny's###
 ####Purpose####
 Scraping all Denny's locations from their website. Including details such as latitude, longitude, address, and contact information.\newline
-#####Approach####
+####Approach####
 
 ###Distance Analysis###
 
