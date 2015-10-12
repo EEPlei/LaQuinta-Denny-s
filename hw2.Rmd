@@ -1,13 +1,13 @@
 ---
-title: "HW 2"
-author: "Team 4 - Duke Dinosaurs"
-output: pdf_document
 ---
+#HW 2#
+#Team 4 - Duke Dinosaurs#
+#October 14, 2015#
 
-#La Quinta# 
+##La Quinta##
 
-#Denny's#
+##Denny's##
 
 
-#Distance Analysis# 
+##Distance Analysis##
 
