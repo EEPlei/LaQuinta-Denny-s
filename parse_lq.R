@@ -4,11 +4,11 @@ extract_data = function(files){
   
   for(file in files)
   {
-    lq_data = data.frame(Address = character(), City = character(), 
-                         State = character(), Zipcode = character(), 
-                         Phone = character(), Fax = character(), 
-                         Latitude = character(), Longitude = character())
-  
+    lq_data = data.frame(Address = NA, City = NA, 
+                         State = NA, Zipcode = NA, 
+                         Phone = NA, Fax = NA, 
+                         Latitude = NA, Longitude = NA, stringsAsFactors = F)
+    
     html = read_html(file)
     
     info = html_nodes(html, ".hotelDetailsBasicInfoTitle p") %>%
@@ -32,6 +32,9 @@ extract_data = function(files){
     lq_data$Latitude = str_extract_all(lat_long,"[0-9-.]{4,}")[[1]][1]
     lq_data$Longitude = str_extract_all(lat_long,"[0-9-.]{4,}")[[1]][2]
     
-    lq_data
+    
+    lq_df <- rbind(lq_data)
   }
+  return(lq_df)
 }
+
