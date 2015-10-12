@@ -1,13 +1,19 @@
 ---
 ---
 #HW 2#
-#Team 4 - Duke Dinosaurs#
-#October 14, 2015#
+##Team 4 - Duke Dinosaurs##
+##October 14, 2015##
 
-##La Quinta##
+###La Quinta###
+####Purpose####
+Scraping all La Quinta locations from their website. Including details such as latitude, longitude, address, contact information, and amenities.\newline
+####Approach####\newline
 
-##Denny's##
 
+###Denny's###
+####Purpose####
+Scraping all Denny's locations from their website. Including details such as latitude, longitude, address, and contact information.\newline
+#####Approach####\newline
 
-##Distance Analysis##
+###Distance Analysis###
 
