@@ -1,22 +1,37 @@
 files = dir("data/lq/",pattern = "*.html",full.names = TRUE)
 
-
-for(file in files)
-{
-  html = read_html(file)
+extract_data = function(files){
   
-  info = html_nodes(html, ".hotelDetailsBasicInfoTitle p") %>%
-         html_text() %>%
-         str_trim() %>%
-         str_replace_all("\n[ ]{2,}","")
+  for(file in files)
+  {
+    lq_data = data.frame(Address = character(), City = character(), 
+                         State = character(), Zipcode = character(), 
+                         Phone = character(), Fax = character(), 
+                         Latitude = character(), Longitude = character())
   
-  addr = strsplit(strsplit(strsplit(info, "Phone:")[[1]],"Fax:")[[1]],"Fax:")
-  
-  numbers = str_extract_all(info, "([0-9])[- .]([0-9]{3})[- .]([0-9]{3})[- .]([0-9]{4})")
-  
-  phone = numbers[[1]][1]
-  
-  fax= numbers[[1]][2]
-  
-  lat_long = html_nodes(html, ".minimap") %>% html_attr("src")
+    html = read_html(file)
+    
+    info = html_nodes(html, ".hotelDetailsBasicInfoTitle p") %>%
+           html_text() %>%
+           str_trim() %>%
+           str_replace_all("\n[ ]{2,}","")
+    
+    addr = strsplit(strsplit(strsplit(info, "Phone:")[[1]],"Fax:")[[1]],"Fax:")
+    addr_parse1 = as.character(unlist(addr))
+    addr_parse2 = str_split(addr_parse1,", ")[[1]][3] %>%
+                  str_split(.," ")
+    numbers = str_extract_all(info, "([0-9])[- .]([0-9]{3})[- .]([0-9]{3})[- .]([0-9]{4})")
+    
+    lq_data$Address = str_split(addr_parse1,", ")[[1]][1]
+    lq_data$City = str_split(addr_parse1,", ")[[1]][2]
+    lq_data$State = addr_parse2[[1]][1]
+    lq_data$Zipcode = addr_parse2[[1]][2]
+    lq_data$Phone = numbers[[1]][1]
+    lq_data$Fax = numbers[[1]][2]
+    lat_long = html_nodes(html, ".minimap") %>% html_attr("src")
+    lq_data$Latitude = str_extract_all(lat_long,"[0-9-.]{4,}")[[1]][1]
+    lq_data$Longitude = str_extract_all(lat_long,"[0-9-.]{4,}")[[1]][2]
+    
+    lq_data
+  }
 }
