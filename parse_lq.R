@@ -5,8 +5,8 @@ extract_data = function(files){
   lq_data = data.frame(Address = NA, City = NA, 
                        State = NA, Zipcode = NA, 
                        Phone = NA, Fax = NA, 
-                       Latitude = NA, Longitude = NA, stringsAsFactors = FALSE)
-                    
+                       Latitude = NA, Longitude = NA, stringsAsFactors = FALSE
+                       
                        for(file in files)
                        {
                          
