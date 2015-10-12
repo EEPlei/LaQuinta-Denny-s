@@ -7,13 +7,13 @@
 ###La Quinta###
 ####Purpose####
 Scraping all La Quinta locations from their website. Including details such as latitude, longitude, address, contact information, and amenities.\newline
-####Approach####\newline
+####Approach####
 
 
 ###Denny's###
 ####Purpose####
 Scraping all Denny's locations from their website. Including details such as latitude, longitude, address, and contact information.\newline
-#####Approach####\newline
+#####Approach####
 
 ###Distance Analysis###
 
