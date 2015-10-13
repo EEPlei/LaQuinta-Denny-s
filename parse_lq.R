@@ -90,6 +90,5 @@ extract_data = function(files){
   return(lq_final)
 }
 
-extract_data(files)
 lq_df <- extract_data(files)
 save(lq_df, file = "data/lq.Rdata")
