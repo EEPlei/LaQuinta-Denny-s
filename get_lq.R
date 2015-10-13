@@ -1,5 +1,6 @@
 library(rvest)
 library(stringr)
+library(magrittr)
 
 base_url = "http://www.lq.com"
 listing_page = "/en/findandbook/hotel-listings.html"
