@@ -1,3 +1,6 @@
+library(rvest)
+library(stringr)
+
 files = dir("data/lq/",pattern = "*.html",full.names = TRUE)
 
 extract_data = function(files){
@@ -40,6 +43,7 @@ extract_data = function(files){
     
     #define various elements through amenities_info such as availability of internet, Wifi, 
     #pools, parking, and complementary breakfast  
+    #Return <NA> if hotel doesn't have the corresponding amenities
     Internet = str_extract(amenities_info, "Free High-Speed Internet Access")[1]
     WiFi = str_extract(amenities_info, "Free Wireless High-Speed Internet Access")[1]
     SwimmingPool = str_extract(amenities_info, "Outdoor Swimming Pool")[1] 
@@ -87,6 +91,5 @@ extract_data = function(files){
   return(lq_final)
 }
 
-extract_data(files)
 lq_df <- extract_data(files)
 save(lq_df, file = "data/lq.Rdata")
