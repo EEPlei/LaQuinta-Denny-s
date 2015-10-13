@@ -6,6 +6,8 @@ listing_page = "/en/findandbook/hotel-listings.html"
 
 listings = read_html(paste0(base_url, listing_page))
 
+
+#define 47 US states as list_of_States, convert into a factorized variable with levels that correspond to each state
 list_of_States <- read.table("lq_states.csv", header = FALSE)
 state <- as.factor(unlist(list_of_States))
 
