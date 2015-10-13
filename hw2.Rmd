@@ -18,5 +18,5 @@ To obtain all the Denny's locations in the US, we started by using a website cal
 5 -141.67969 59.06586         1053
 ```
 The first two columns tells us where the center of our circles are located. Radius.Miles tells us the radius of our circles in miles.
-![alt text](first.png)
+![alt text](figures/first.png)
 ##Distance Analysis##
