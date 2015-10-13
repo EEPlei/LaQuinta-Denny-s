@@ -32,9 +32,8 @@ Now that we have information on all Denny's locations in the US, it's possible t
 ##Distance Analysis##
 For our Distance Analysis, we first need to decide how we are going to calculate distance. We've decided to use the Haversine Formula. This formula is used to calculate the distances between two points on a sphere where the path will go along the surface of the sphere. Instead of the Euclidean distance, the formula will give us the great-circle distance. Although Earth is not a sphere, for our purposes, it is enough to approximate it to be a sphere with a radius of 3,959 miles.    
 We start with two points on earth. We want their longitudes and latitudes. We can then calculate the distance by 
-The nearest Denny's for a La Quinta, but that La Quinta may not be the nearest La Quinta to that Denny's. This creates a discrepancy. SUppose we have an American Map, Denny's are x's and La Quinta are .'s. Approximating the numbers, we can see the distributions of both. They may not be evenly distributed. La Quinta's distribution may be more spread. Which is more densely distributed. It depends on what part of the US. Average of each tells us how clustered each store is. Can also plot density of each. Variance could differ. Analyze densities and variance which will indicate the clustering properties of each. 
+The nearest Denny's for a La Quinta, but that La Quinta may not be the nearest La Quinta to that Denny's. This creates a discrepancy. Suppose we have an American Map, Denny's are x's and La Quinta are .'s. Approximating the numbers, we can see the distributions of both. They may not be evenly distributed. La Quinta's distribution may be more spread. Which is more densely distributed. It depends on what part of the US. Average of each tells us how clustered each store is. Can also plot density of each. Variance could differ. Analyze densities and variance which will indicate the clustering properties of each. 
 
-Let's produce a map of the US's mainland. So all states except for Hawaii and Alaska. We can do this using the packages `maps` and `mapdata`. 
 ```{r}
 
 load("data/dennys.Rdata") # loads dennys_df #
