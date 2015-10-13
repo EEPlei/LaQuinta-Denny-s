@@ -1,4 +1,5 @@
 library(rvest)
+library(magrittr)
 files <- dir("data/dennys/",pattern = "*.xml",full.names = TRUE)
 
 mydf <- NULL
