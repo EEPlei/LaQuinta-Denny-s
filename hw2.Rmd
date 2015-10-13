@@ -8,8 +8,8 @@ Due: Oct 14, 2015
 source("data/lq.Rdata")
 source("data/dennys.Rdata")
 ```
-##La Quinta##    
-##Denny's##    
+##La Quinta##
+##Denny's##
 To obtain all the Denny's locations in the US, we started by using a website called freemaptools to draw circles around parts of the US. With five circles, we should be covering all of US.
   
 ```
@@ -20,9 +20,13 @@ To obtain all the Denny's locations in the US, we started by using a website cal
 4 -157.14844 20.82924          438
 5 -141.67969 59.06586         1053
 ```
-The first two columns tells us where the center of our circles are located. Radius.Miles tells us the radius of our circles in miles. These coordinates and radii will be stored in dennys_coords.csv so it can be used in the next steps. ***
+The first two columns tells us where the center of our circles are located. Radius.Miles tells us the radius of our circles in miles. These coordinates and radii will be stored in dennys_coords.csv so it can be used in the next steps.   
+   
 Now, in `get_dennys.R`, we'll extract the location data from `hosted.where2getit.com/dennys`. We get the locations in such a way because Denny's uses the third-party Where2GetIt API to display their restaurant locations. It will take the circle centers and radii specified in `dennys_coords.csv` to search for all locations within the radius of that circumference. We first specified the key, which Denny's uses, to access Where2GetIt API. Next, we limited the number of results to be 1,000. Now, `dennys_coords.csv` will have the longitude and latitude of the circle centers, as well as the search radius. Since we have five circles, we will run through the function five times using a ForLoop. The information will be stored as an .xml file under the dennys directory inside our data directory.    
+   
 Finally, we can construct a data frame with the details of each denny's location. We'll find the longitude, latitude, postal code, address, city, country, state, and unique id of each location. Since our circles overlap, we may have some locations listed multiple times. We'll use `unique` so that we only have each location listed once.    
 Now that we have information on all Denny's locations in the US, it's possible to do distance analysis.    
 
 ##Distance Analysis##
+For our Distance Analysis, we first need to decide how we are going to calculate distance. We've decided to use the Haversine Formula. This formula is used to calculate the distances between two points on a sphere where the path will go along the surface of the sphere. Instead of the Euclidean distance, the formula will give us the great-circle distance. Although Earth is not a sphere, for our purposes, it is enough to approximate it to be a sphere with a radius of 3,959 miles.    
+We start with two points on earth. We want their longitudes and latitudes. We can then calculate the distance by 
