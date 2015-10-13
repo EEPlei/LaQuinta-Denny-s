@@ -1,3 +1,5 @@
+library(rvest)
+library(stringr)
 files = dir("data/lq/",pattern = "*.html",full.names = TRUE)
 
 extract_data = function(files){
