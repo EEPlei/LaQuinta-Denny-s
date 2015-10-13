@@ -31,27 +31,12 @@ Now that we have information on all Denny's locations in the US, it's possible t
 
 ##Distance Analysis##
 For our Distance Analysis, we first need to decide how we are going to calculate distance. We've decided to use the Haversine Formula. This formula is used to calculate the distances between two points on a sphere where the path will go along the surface of the sphere. Instead of the Euclidean distance, the formula will give us the great-circle distance. Although Earth is not a sphere, for our purposes, it is enough to approximate it to be a sphere with a radius of 3,959 miles.    
-We start with two points on earth. We want their longitudes and latitudes. We can then calculate the distance by 
-The nearest Denny's for a La Quinta, but that La Quinta may not be the nearest La Quinta to that Denny's. This creates a discrepancy. Suppose we have an American Map, Denny's are x's and La Quinta are .'s. Approximating the numbers, we can see the distributions of both. They may not be evenly distributed. La Quinta's distribution may be more spread. Which is more densely distributed. It depends on what part of the US. Average of each tells us how clustered each store is. Can also plot density of each. Variance could differ. Analyze densities and variance which will indicate the clustering properties of each. 
+So the issue with finding the closest Denny's for a La Quinta is that, that La Quinta may not be the nearest La Quinta to that Denny's. This creates a disrepancy. Instead, to conduct our distance analysis, we will calculate the distance to the nearest Denny's for all La Quinta's and vice versa. We can then analyze our results to draw some conclusions about their locations. 
 
 ```{r}
 
 load("data/dennys.Rdata") # loads dennys_df #
 load("data/lq.Rdata") # loads lq_df #
-
-d_coord <- data.frame(latitude= dennys_df$Latitude,longitude=dennys_df$Longitude) %>% dataframe_tolist()
-l_coord <- data.frame(latitude= lq_df$Latitude,longitude=lq_df$Longitude)  %>% dataframe_tolist()
-
-dist <- function(this, that){
-  min_dist <- Inf
-  for(i in that){
-    temp_dist <- spatial_dist(this[1],this[2],i[1],i[2])
-    if(temp_dist < min_dist){
-      min_dist <- temp_dist
-    }
-  }
-  return (c(this,min_dist))
-}
 
 spatial_dist <- function(thisx,thisy,thatx,thaty){
   # x is latitude, y is longitude #
@@ -70,10 +55,22 @@ spatial_dist <- function(thisx,thisy,thatx,thaty){
 }
 
 dataframe_tolist <- function(frame){
-  #Chun: put your dataframe to list conversion here
-  return()
+  split(frame, seq(nrow(frame)))
 }
 
+d_coord <- data.frame(latitude= dennys_df$Latitude,longitude=dennys_df$Longitude) %>% dataframe_tolist()
+l_coord <- data.frame(latitude= lq_df$Latitude,longitude=lq_df$Longitude)  %>% dataframe_tolist()
+
+dist <- function(this, that){
+  min_dist <- Inf
+  for(i in that){
+    temp_dist <- spatial_dist(this[1],this[2],i[1],i[2])
+    if(temp_dist < min_dist){
+      min_dist <- temp_dist
+    }
+  }
+  return (c(this,min_dist))
+}
 dennys_dist <- lapply(d_coord, dist(d_coord,l_coord))
 do.call(rbind, dennys_dist)
 
