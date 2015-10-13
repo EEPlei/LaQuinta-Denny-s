@@ -31,17 +31,15 @@ extract_data = function(files){
                numbers[[1]][1],
                numbers[[1]][2],
                str_extract_all(lat_long,"[0-9.-]{4,}")[[1]][1],
-               str_extract_all(lat_long,"[0-9.-]{4,}")[[1]][2]
-    )
-    
+               str_extract_all(lat_long,"[0-9.-]{4,}")[[1]][2])
+
     lq_data = rbind(lq_data, setNames(as.list(newrow), names(lq_data)))
     lq_final = lq_data[-1,]
   } 
   return(lq_final)
 }
 
-
-
+lq_df <- extract_data(files)
 
 
 
