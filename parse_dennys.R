@@ -22,7 +22,7 @@ for(file in files)
 }
 
 mydf <- unique(mydf)
-mydf <- mydf[mydf$Country == "US",]
+dennys_df <- mydf[mydf$Country == "US",]
 
 
 
