@@ -51,9 +51,20 @@ dist <- function(this, that){
   return (c(this,min_dist))
 }
 
-spatial_dist <- function(dx,dy,lx,ly){
-  ##Lei: put your spherical distance formula here
-  return()
+spatial_dist <- function(thisx,thisy,thatx,thaty){
+  # x is latitude, y is longitude #
+  R = 3959 # Earth's radius in miles #
+  radians = function(degrees) return(degrees*pi/180)
+  # turns lat, long degrees into radians #
+  this_lat = radians(thisx)
+  this_long = radians(thisy)
+  that_lat = radians(thatx)
+  that_long = radians(thaty)
+  # change lat and long to radians #
+  a = (sin((that_lat - this_lat)/2))^2
+  b = cos(this_lat)*cos(that_lat)*(sin((that_long - this_long)/2))^2
+  d = 2*R*asin(sqrt(a+b)) # haversine formula #
+  return(d) # distance between this and that #
 }
 
 dataframe_tolist <- function(frame){
@@ -69,4 +80,4 @@ do.call(rbind, lq_dist)
 
 
 ```
-As you can see
+
