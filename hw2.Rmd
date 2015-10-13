@@ -37,8 +37,8 @@ Let's produce a map of the US's mainland. So all states except for Hawaii and Al
 load("data/dennys.Rdata") # loads dennys_df #
 load("data/lq.Rdata") # loads lq_df #
 
-d_coord <- data.frame(latitude= dennys$Latitude,longitude=dennys$Longitude) %>% dataframe_tolist()
-l_coord <- data.frame(latitude= lq$Latitude,longitude=lq$Longitude)  %>% dataframe_tolist()
+d_coord <- data.frame(latitude= dennys_df$Latitude,longitude=dennys_df$Longitude) %>% dataframe_tolist()
+l_coord <- data.frame(latitude= lq_df$Latitude,longitude=lq_df$Longitude)  %>% dataframe_tolist()
 
 dist <- function(this, that){
   min_dist <- Inf
