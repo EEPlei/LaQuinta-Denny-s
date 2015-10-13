@@ -27,7 +27,7 @@ for(file in files)
 
 mydf <- unique(mydf)
 dennys_df <- mydf[mydf$Country == "US",]
-
+save(dennys_df, file = "data/dennys.Rdata")
 
 
 

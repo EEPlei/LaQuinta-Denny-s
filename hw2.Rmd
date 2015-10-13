@@ -5,6 +5,8 @@ output: html_document
 Team 4 - Duke Dinosaurs    
 Due: Oct 14, 2015  
 
+source(parse_dennys.R)
+
 ##La Quinta##
 ##Denny's##
 To obtain all the Denny's locations in the US, we started by using a website called freemaptools to draw circles around parts of the US. With five circles, we should be covering all of US.
