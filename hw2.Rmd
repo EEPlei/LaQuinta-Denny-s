@@ -4,10 +4,7 @@ output: html_document
 #HW 2 - La Quinta is Spanish for Next to Denny's#
 Team 4 - Duke Dinosaurs    
 Due: Oct 14, 2015  
-```{r}
-source("data/lq.Rdata")
-source("data/dennys.Rdata")
-```
+
 ##La Quinta##
 ##Denny's##
 To obtain all the Denny's locations in the US, we started by using a website called freemaptools to draw circles around parts of the US. With five circles, we should be covering all of US.
