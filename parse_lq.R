@@ -30,8 +30,8 @@ extract_data = function(files){
                addr_parse2[[1]][2],
                numbers[[1]][1],
                numbers[[1]][2],
-               str_extract_all(lat_long,"[0-9-.]{4,}")[[1]][1],
-               str_extract_all(lat_long,"[0-9-.]{4,}")[[1]][2]
+               str_extract_all(lat_long,"[0-9.-]{4,}")[[1]][1],
+               str_extract_all(lat_long,"[0-9.-]{4,}")[[1]][2]
                )
     
     lq_data = rbind(lq_data, setNames(as.list(newrow), names(lq_data)))
