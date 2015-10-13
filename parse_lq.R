@@ -1,5 +1,7 @@
 library(rvest)
 library(stringr)
+library(magrittr)
+
 
 files = dir("data/lq/",pattern = "*.html",full.names = TRUE)
 
