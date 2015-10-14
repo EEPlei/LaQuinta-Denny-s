@@ -44,6 +44,7 @@ Denny's is a popular restaurant that will draw in any customer that would like t
 In conclusion, our hypothesis is that LaQuinta will be more clustered than Denny's. In general, the distance between a Denny's to the closest LaQuinta will be greater than the distance between a LaQuinta and the closest Denny's. 
 
 ```{r}
+library(magrittr)
 load("data/dennys.Rdata") # loads dennys_df #
 load("data/lq.Rdata") # loads lq_df #
 
