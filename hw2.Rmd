@@ -32,8 +32,16 @@ Finally, we can construct a data frame with the details of each denny's location
 Now that we have information on all Denny's locations in the US, it's possible to do distance analysis.    
 
 ##Distance Analysis##
-For our Distance Analysis, we first need to decide how we are going to calculate distance. We've decided to use the Haversine Formula. This formula is used to calculate the distances between two points on a sphere where the path will go along the surface of the sphere. Instead of the Euclidean distance, the formula will give us the great-circle distance. Although Earth is not a sphere, for our purposes, it is enough to approximate it to be a sphere with a radius of 3,959 miles.    
-So the issue with finding the closest Denny's for a LaQuinta is that, that LaQuinta may not be the nearest LaQuinta to that Denny's. This creates a disrepancy. Instead, to conduct our distance analysis, we will calculate the distance to the nearest Denny's for all LaQuinta's and vice versa. We can then analyze our results to draw some conclusions about their locations. 
+For our Distance Analysis, we first need to decide how we are going to calculate distance. We've decided to use the Haversine Formula. This formula is used to calculate the distances between two points on a sphere where the path will go along the surface of the sphere. Instead of the Euclidean distance, the formula will give us the great-circle distance. Although Earth is not a sphere, for our purposes, it is enough to approximate it to be a sphere with a radius of 3,959 miles.      
+    
+So the issue with finding the closest Denny's for a LaQuinta is that, that LaQuinta may not be the nearest LaQuinta to that Denny's. This creates a discrepancy. Instead, to conduct our distance analysis, we will calculate the distance to the nearest Denny's for all LaQuinta's and vice versa. We can then analyze our results to draw some conclusions about their locations.     
+     
+To illustrate we take an example where we have four LaQuintas and four Denny's. Let LaQuintas' coordinates be (1,0), (0,1), (1,1), and (0,0). Let Denny's coordinates be (0,0.001), (0.001,0), (-0.001,0), and (0,-0.001). So the closest LaQuinta to all the Denny's would be the one at (0,0). However, it wouldn't be true vice versa. In this example Denny's is more clustered and we can see that the average distance between a Denny's and the closest LaQuinta will be less than the average distance between a LaQuinta and the nearest Denny's.    
+   
+Denny's is a popular restaurant that will draw in any customer that would like to eat. On the other hand, LaQuinta is a hotel, so it will only draw in customers who are travelling and need a place to stay. As a result, LaQuintas will, most likely, be found in towns or cities that have a lot of visitors and tourists, which is why they will be clustered. 
+     
+In conclusion, our hypothesis is that LaQuinta will be more clustered than Denny's. In general, the distance between a Denny's to the closest LaQuinta will be greater than the distance between a LaQuinta and the closest Denny's. 
+   
 
 ```{r}
 load("data/dennys.Rdata") # loads dennys_df #
@@ -51,36 +59,50 @@ spatial_dist <- function(thisx,thisy,thatx,thaty){
   # change lat and long to radians #
   a = (sin((that_lat - this_lat)/2))^2
   b = cos(this_lat)*cos(that_lat)*(sin((that_long - this_long)/2))^2
-  d = 2*R*asin(sqrt(a+b)) # haversine formula - distance in miles #
-  return(5280*d) # distance between this and that in feet #
-  # 1 mile = 5280 feet #
+  d = 2*R*asin(sqrt(a+b)) # haversine formula #
+  return(5280*d) # distance between this and that #
 }
 
+#The following function convert the coordinate data frame to a list, each element of the list a 
+#two-tuple vector, containing latitude and longitude for each restaurant/hotel, we call this kind of data structure "clean list"
 dataframe_tolist <- function(frame){
   split(frame, seq(nrow(frame)))
 }
-
+#The following part is a bit painful, trying to parse the two data frames for Dennys and lq to the "clean lists"
+#The following two lines are quite straightfoward, extract the lat and long columns, and then convert the df to "clean lists" using
+# the function just defined above
 d_coord <- data.frame(latitude= dennys_df$Latitude,longitude=dennys_df$Longitude,stringsAsFactors = FALSE) %>% dataframe_tolist()
 l_coord <- data.frame(latitude= lq_df$Latitude,longitude=lq_df$Longitude,stringsAsFactors = FALSE)  %>% dataframe_tolist()
+#Then I find each vector has weird name on it so I make the names NULL
 names(d_coord) <- NULL
 names(l_coord) <- NULL
+#Then I find each element in the "clean list" is actually a list instead of a vector, so I unlist each element
 d_coord <- lapply(d_coord,unlist)
 l_coord <- lapply(l_coord,unlist)
+#Finally I find the content is each vector is character instead of numeric, so I make them double
 d_coord <- lapply(d_coord,as.double)
 l_coord <- lapply(l_coord,as.double)
 
+#The following two functions are very very similar only excluding the second line.
+#The reason why I write two similar functions twice is that I try to use lapply
+#The input of distd function is each element of the "clean list" for dennys
+#It returns a three-tuple, whose elements are this denny's latitude, longitude and the distance between this denny's and its nearest lq
 distd <- function(this){
-  that <- l_coord
-  min_dist <- Inf
-  for(i in that){
+  that <- l_coord # make that the "clean list" of lq
+  min_dist <- Inf # set min_dist as Infinity (so we can compare and find the min distance as below)
+  for(i in that){ # for each hotel of lq
     temp_dist <- spatial_dist(unlist(this)[1],unlist(this)[2],unlist(i)[1],unlist(i)[2])
+    # make temp_dist the patial distance between this dennys and that lq
     if(temp_dist < min_dist){
       min_dist <- temp_dist
+      # if this number is smaller then min_dist, replace it, you know thus we can find the nearest distance
     }
   }
   return (c(unlist(this),min_dist))
+  #return the three-tuple
 }
 
+#distl is sysmmtric
 distl <- function(this){
   that <- d_coord
   min_dist <- Inf
@@ -92,17 +114,32 @@ distl <- function(this){
   }
   return (c(unlist(this),min_dist))
 }
+
+#now we apply distd on denny's "clean list"
 dennys_dist <- lapply(d_coord, distd)
+#Then we have made a dataframe with three columns, denny's lat, denny's long and dist_of_nearest_lq
 dennys_neighbor <- do.call(rbind, dennys_dist)
 colnames(dennys_neighbor) <- c("dennys_latitude","dennys_longitude","dist_of_nearest_lq")
 
+#same for lq
 lq_dist <- lapply(l_coord, distl)
 lq_neighbor <-do.call(rbind, lq_dist)
 colnames(lq_neighbor) <- c("lq_latitude","lq_longitude","dist_of_nearest_denny's")
 
+#Basically we have obtained two sets of distances:
+#From denny's point of view, the distance of the nearest lq
+# and from lq's point of view, this distance of the nearest denny's
+#below we plot the distributions for them
 par(mfrow=c(1,2))
 hist(dennys_neighbor[,3],breaks = 3000,xlim = c(0,2.0e+05))
 hist(lq_neighbor[,3],breaks = 300,xlim = c(0,2.0e+05))
+
+#if we zoom in a little, we can see it clearer
+par(mfrow=c(1,2))
+hist(dennys_neighbor[,3],breaks = 3000,xlim = c(0,2.0e+05))
+hist(lq_neighbor[,3],breaks = 300,xlim = c(0,2.0e+05))
+
+
 ```
 
 ```{r}
@@ -122,7 +159,9 @@ These are our results.
   These measurements are in feet. 
 ```
 As you can see, the summary statistic values for Denny's are greater than LaQuintas. This tells us that LaQuintas are more clustered than Denny's, which can be verified by going onto Google Maps and pulling up all the LaQuinta and Denny's locations in the US. You'll see that Denny's is significantly more widespread.    
-This result isn't surprising because Denny's is a popular restaurant that will draw in any customer that would like to eat. On the other hand, LaQuinta is a hotel, so it will only draw in customers who are travelling and need a place to stay. As a result, LaQuintas will, most likely, be found in towns or cities that have a lot of visitors and tourists, which is why they will be clustered.    
+   
+This result isn't surprising and proves our earlier hypothesis.  
+    
 You can also see that the closest Denny's and LaQuinta is approximately 50 feet apart. 
 ```{r}
 dennys_neighbor[,3][which(dennys_neighbor[,3] <= 5280)]
@@ -149,4 +188,5 @@ Similarly, there are 238 LaQuintas with a Denny's within a 1 mile radius. This i
 
 All of the information can be seen when you run the above function and view the two histograms that appear. The x-axis tells you the distance, and the y-axis tells you the frequency.   
    
-As you can see, we disagree with Hedberg's claim that "La Quinta is Spanish for next to Denny's". While it may occur in a way that presents itself as a common occurence, analysis of all locations has proven it to be not true. 
+As you can see, we disagree with Hedberg's claim that "La Quinta is Spanish for next to Denny's". While it may occur in a way that presents itself as a common occurrence, analysis of all locations has proven it to be not true. 
+
