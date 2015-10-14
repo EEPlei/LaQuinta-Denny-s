@@ -33,7 +33,7 @@ Now that we have information on all Denny's locations in the US, it's possible t
 
 ##Distance Analysis##
 For our Distance Analysis, we first need to decide how we are going to calculate distance. We've decided to use the Haversine Formula. This formula is used to calculate the distances between two points on a sphere where the path will go along the surface of the sphere. Instead of the Euclidean distance, the formula will give us the great-circle distance. Although Earth is not a sphere, for our purposes, it is enough to approximate it to be a sphere with a radius of 3,959 miles.    
-So the issue with finding the closest Denny's for a LaQuinta is that, that LaQuinta may not be the nearest LaQuinta to that Denny's. This creates a disrepancy. Instead, to conduct our distance analysis, we will calculate the distance to the nearest Denny's for all LaQuinta's and vice versa. We can then analyze our results to draw some conclusions about their locations. 
+So the issue with finding the closest Denny's for a LaQuinta is that, that LaQuinta may not be the nearest LaQuinta to that Denny's. This creates a discrepancy. Instead, to conduct our distance analysis, we will calculate the distance to the nearest Denny's for all LaQuinta's and vice versa. We can then analyze our results to draw some conclusions about their locations. 
 
 ```{r}
 load("data/dennys.Rdata") # loads dennys_df #
@@ -149,4 +149,4 @@ Similarly, there are 238 LaQuintas with a Denny's within a 1 mile radius. This i
 
 All of the information can be seen when you run the above function and view the two histograms that appear. The x-axis tells you the distance, and the y-axis tells you the frequency.   
    
-As you can see, we disagree with Hedberg's claim that "La Quinta is Spanish for next to Denny's". While it may occur in a way that presents itself as a common occurence, analysis of all locations has proven it to be not true. 
+As you can see, we disagree with Hedberg's claim that "La Quinta is Spanish for next to Denny's". While it may occur in a way that presents itself as a common occurrence, analysis of all locations has proven it to be not true. 
