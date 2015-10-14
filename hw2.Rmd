@@ -33,7 +33,7 @@ Now that we have information on all Denny's locations in the US, it's possible t
 
 ##Distance Analysis##
 For our Distance Analysis, we first need to decide how we are going to calculate distance. We've decided to use the Haversine Formula. This formula is used to calculate the distances between two points on a sphere where the path will go along the surface of the sphere. Instead of the Euclidean distance, the formula will give us the great-circle distance. Although Earth is not a sphere, for our purposes, it is enough to approximate it to be a sphere with a radius of 3,959 miles.    
-So the issue with finding the closest Denny's for a La Quinta is that, that La Quinta may not be the nearest La Quinta to that Denny's. This creates a disrepancy. Instead, to conduct our distance analysis, we will calculate the distance to the nearest Denny's for all La Quinta's and vice versa. We can then analyze our results to draw some conclusions about their locations. 
+So the issue with finding the closest Denny's for a LaQuinta is that, that LaQuinta may not be the nearest LaQuinta to that Denny's. This creates a disrepancy. Instead, to conduct our distance analysis, we will calculate the distance to the nearest Denny's for all LaQuinta's and vice versa. We can then analyze our results to draw some conclusions about their locations. 
 
 ```{r}
 load("data/dennys.Rdata") # loads dennys_df #
@@ -51,8 +51,9 @@ spatial_dist <- function(thisx,thisy,thatx,thaty){
   # change lat and long to radians #
   a = (sin((that_lat - this_lat)/2))^2
   b = cos(this_lat)*cos(that_lat)*(sin((that_long - this_long)/2))^2
-  d = 2*R*asin(sqrt(a+b)) # haversine formula #
-  return(5280*d) # distance between this and that #
+  d = 2*R*asin(sqrt(a+b)) # haversine formula - distance in miles #
+  return(5280*d) # distance between this and that in feet #
+  # 1 mile = 5280 feet #
 }
 
 dataframe_tolist <- function(frame){
@@ -104,4 +105,48 @@ hist(dennys_neighbor[,3],breaks = 3000,xlim = c(0,2.0e+05))
 hist(lq_neighbor[,3],breaks = 300,xlim = c(0,2.0e+05))
 ```
 
+```{r}
+summary(dennys_neighbor[,3])
+summary(lq_neighbor[,3])
+```
 
+Finding some summary statistics about the distances between the nearest LaQuinta to all the Denny's and the nearest Denny's to all LaQuintas will tell us a little about how these two establishments are clustered in the US.    
+These are our results. 
+```
+ summary(lq_neighbor[,3])
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+    50.2   4369.0  16580.0  61850.0  62090.0 923900.0 
+ summary(dennys_neighbor[,3])
+    Min.  1st Qu.   Median     Mean  3rd Qu.     Max. 
+      50    12780    33270   138500    92450 12690000 
+  These measurements are in feet. 
+```
+As you can see, the summary statistic values for Denny's are greater than LaQuintas. This tells us that LaQuintas are more clustered than Denny's, which can be verified by going onto Google Maps and pulling up all the LaQuinta and Denny's locations in the US. You'll see that Denny's is significantly more widespread.    
+This result isn't surprising because Denny's is a popular restaurant that will draw in any customer that would like to eat. On the other hand, LaQuinta is a hotel, so it will only draw in customers who are travelling and need a place to stay. As a result, LaQuintas will, most likely, be found in towns or cities that have a lot of visitors and tourists, which is why they will be clustered.    
+You can also see that the closest Denny's and LaQuinta is approximately 50 feet apart. 
+```{r}
+dennys_neighbor[,3][which(dennys_neighbor[,3] <= 5280)]
+```
+```
+> length(dennys_neighbor[,3][which(dennys_neighbor[,3] <= 5280)])
+[1] 239
+> 238/nrow(dennys_neighbor)
+[1] 0.1463715
+```
+There are only 239 Denny's that have a LaQuinta within a 1 mile radius. That's only 14.6% of all Denny's. 
+
+```{r}
+lq_neighbor[,3][which(lq_neighbor[,3] <= 5280)]
+```
+
+```
+> length(lq_neighbor[,3][which(lq_neighbor[,3] <= 5280)])
+[1] 238
+> 238/nrow(lq_neighbor)
+[1] 0.2735632
+```
+Similarly, there are 238 LaQuintas with a Denny's within a 1 mile radius. This is 27.4% of all LaQuintas.    
+
+All of the information can be seen when you run the above function and view the two histograms that appear. The x-axis tells you the distance, and the y-axis tells you the frequency.   
+   
+As you can see, we disagree with Hedberg's claim that "La Quinta is Spanish for next to Denny's". While it may occur in a way that presents itself as a common occurence, analysis of all locations has proven it to be not true. 
