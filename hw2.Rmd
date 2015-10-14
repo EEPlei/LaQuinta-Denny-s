@@ -32,7 +32,7 @@ Finally, we can construct a data frame with the details of each denny's location
 Now that we have information on all Denny's locations in the US, it's possible to do distance analysis.    
 
 ##Distance Analysis##
-<<<<<<< HEAD
+
 For our Distance Analysis, we first need to decide how we are going to calculate distance. We've decided to use the Haversine Formula. This formula is used to calculate the distances between two points on a sphere where the path will go along the surface of the sphere. Instead of the Euclidean distance, the formula will give us the great-circle distance. Although Earth is not a sphere, for our purposes, it is enough to approximate it to be a sphere with a radius of 3,959 miles.      
     
 So the issue with finding the closest Denny's for a LaQuinta is that, that LaQuinta may not be the nearest LaQuinta to that Denny's. This creates a discrepancy. Instead, to conduct our distance analysis, we will calculate the distance to the nearest Denny's for all LaQuinta's and vice versa. We can then analyze our results to draw some conclusions about their locations.     
@@ -42,11 +42,6 @@ To illustrate we take an example where we have four LaQuintas and four Denny's. 
 Denny's is a popular restaurant that will draw in any customer that would like to eat. On the other hand, LaQuinta is a hotel, so it will only draw in customers who are travelling and need a place to stay. As a result, LaQuintas will, most likely, be found in towns or cities that have a lot of visitors and tourists, which is why they will be clustered. 
      
 In conclusion, our hypothesis is that LaQuinta will be more clustered than Denny's. In general, the distance between a Denny's to the closest LaQuinta will be greater than the distance between a LaQuinta and the closest Denny's. 
-   
-=======
-For our Distance Analysis, we first need to decide how we are going to calculate distance. We've decided to use the Haversine Formula. This formula is used to calculate the distances between two points on a sphere where the path will go along the surface of the sphere. Instead of the Euclidean distance, the formula will give us the great-circle distance. Although Earth is not a sphere, for our purposes, it is enough to approximate it to be a sphere with a radius of 3,959 miles.    
-So the issue with finding the closest Denny's for a LaQuinta is that, that LaQuinta may not be the nearest LaQuinta to that Denny's. This creates a discrepancy. Instead, to conduct our distance analysis, we will calculate the distance to the nearest Denny's for all LaQuinta's and vice versa. We can then analyze our results to draw some conclusions about their locations. 
->>>>>>> 28721572d711a01cf2fedc2ea81eaf1d46d3dd79
 
 ```{r}
 load("data/dennys.Rdata") # loads dennys_df #
