@@ -34,7 +34,6 @@ For our Distance Analysis, we first need to decide how we are going to calculate
 So the issue with finding the closest Denny's for a La Quinta is that, that La Quinta may not be the nearest La Quinta to that Denny's. This creates a disrepancy. Instead, to conduct our distance analysis, we will calculate the distance to the nearest Denny's for all La Quinta's and vice versa. We can then analyze our results to draw some conclusions about their locations. 
 
 ```{r}
-
 load("data/dennys.Rdata") # loads dennys_df #
 load("data/lq.Rdata") # loads lq_df #
 
@@ -51,32 +50,56 @@ spatial_dist <- function(thisx,thisy,thatx,thaty){
   a = (sin((that_lat - this_lat)/2))^2
   b = cos(this_lat)*cos(that_lat)*(sin((that_long - this_long)/2))^2
   d = 2*R*asin(sqrt(a+b)) # haversine formula #
-  return(d) # distance between this and that #
+  return(5280*d) # distance between this and that #
 }
 
 dataframe_tolist <- function(frame){
   split(frame, seq(nrow(frame)))
 }
 
-d_coord <- data.frame(latitude= dennys_df$Latitude,longitude=dennys_df$Longitude) %>% dataframe_tolist()
-l_coord <- data.frame(latitude= lq_df$Latitude,longitude=lq_df$Longitude)  %>% dataframe_tolist()
+d_coord <- data.frame(latitude= dennys_df$Latitude,longitude=dennys_df$Longitude,stringsAsFactors = FALSE) %>% dataframe_tolist()
+l_coord <- data.frame(latitude= lq_df$Latitude,longitude=lq_df$Longitude,stringsAsFactors = FALSE)  %>% dataframe_tolist()
+names(d_coord) <- NULL
+names(l_coord) <- NULL
+d_coord <- lapply(d_coord,unlist)
+l_coord <- lapply(l_coord,unlist)
+d_coord <- lapply(d_coord,as.double)
+l_coord <- lapply(l_coord,as.double)
 
-dist <- function(this, that){
+distd <- function(this){
+  that <- l_coord
   min_dist <- Inf
   for(i in that){
-    temp_dist <- spatial_dist(this[1],this[2],i[1],i[2])
+    temp_dist <- spatial_dist(unlist(this)[1],unlist(this)[2],unlist(i)[1],unlist(i)[2])
     if(temp_dist < min_dist){
       min_dist <- temp_dist
     }
   }
-  return (c(this,min_dist))
+  return (c(unlist(this),min_dist))
 }
-dennys_dist <- lapply(d_coord, dist(d_coord,l_coord))
-do.call(rbind, dennys_dist)
 
-lq_dist <- lapply(l_coord, dist(l_coord,d_coord))
-do.call(rbind, lq_dist)
+distl <- function(this){
+  that <- d_coord
+  min_dist <- Inf
+  for(i in that){
+    temp_dist <- spatial_dist(unlist(this)[1],unlist(this)[2],unlist(i)[1],unlist(i)[2])
+    if(temp_dist < min_dist){
+      min_dist <- temp_dist
+    }
+  }
+  return (c(unlist(this),min_dist))
+}
+dennys_dist <- lapply(d_coord, distd)
+dennys_neighbor <- do.call(rbind, dennys_dist)
+colnames(dennys_neighbor) <- c("dennys_latitude","dennys_longitude","dist_of_nearest_lq")
 
+lq_dist <- lapply(l_coord, distl)
+lq_neighbor <-do.call(rbind, lq_dist)
+colnames(lq_neighbor) <- c("lq_latitude","lq_longitude","dist_of_nearest_denny's")
 
+par(mfrow=c(1,2))
+hist(dennys_neighbor[,3],breaks = 3000,xlim = c(0,2.0e+05))
+hist(lq_neighbor[,3],breaks = 300,xlim = c(0,2.0e+05))
 ```
+
 
