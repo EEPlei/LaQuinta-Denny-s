@@ -46,7 +46,7 @@ In conclusion, our hypothesis is that LaQuinta will be more clustered than Denny
 ```{r}
 load("data/dennys.Rdata") # loads dennys_df #
 load("data/lq.Rdata") # loads lq_df #
-
+library(magrittr)
 spatial_dist <- function(thisx,thisy,thatx,thaty){
   # x is latitude, y is longitude #
   R = 3959 # Earth's radius in miles #
