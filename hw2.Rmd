@@ -54,24 +54,37 @@ spatial_dist <- function(thisx,thisy,thatx,thaty){
   return(d) # distance between this and that #
 }
 
+spatial_dist <- function(thisx,thisy,thatx,thaty){
+  return(sqrt((thisy-thaty)^2 + (thisx -thatx)^2))
+}
+
+
 dataframe_tolist <- function(frame){
   split(frame, seq(nrow(frame)))
 }
 
-d_coord <- data.frame(latitude= dennys_df$Latitude,longitude=dennys_df$Longitude) %>% dataframe_tolist()
-l_coord <- data.frame(latitude= lq_df$Latitude,longitude=lq_df$Longitude)  %>% dataframe_tolist()
+d_coord <- data.frame(latitude= dennys_df$Latitude,longitude=dennys_df$Longitude,stringsAsFactors = FALSE) %>% dataframe_tolist()
+l_coord <- data.frame(latitude= lq_df$Latitude,longitude=lq_df$Longitude,stringsAsFactors = FALSE)  %>% dataframe_tolist()
+names(d_coord) <- NULL
+names(l_coord) <- NULL
+d_coord <- lapply(d_coord,unlist)
+l_coord <- lapply(l_coord,unlist)
+d_coord <- lapply(d_coord,as.double)
+l_coord <- lapply(l_coord,as.double)
 
-dist <- function(this, that){
+
+dist <- function(this){
+  that <- l_coord
   min_dist <- Inf
   for(i in that){
-    temp_dist <- spatial_dist(this[1],this[2],i[1],i[2])
+    temp_dist <- spatial_dist(unlist(this)[1],unlist(this)[2],unlist(i)[1],unlist(i)[2])
     if(temp_dist < min_dist){
       min_dist <- temp_dist
     }
   }
-  return (c(this,min_dist))
+  return (c(unlist(this),min_dist))
 }
-dennys_dist <- lapply(d_coord, dist(d_coord,l_coord))
+dennys_dist <- lapply(d_coord, funtion(x) dist(x))
 do.call(rbind, dennys_dist)
 
 lq_dist <- lapply(l_coord, dist(l_coord,d_coord))
