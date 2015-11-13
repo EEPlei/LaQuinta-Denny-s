@@ -2,9 +2,8 @@ library(rvest)
 library(magrittr)
 files <- dir("data/dennys/",pattern = "*.xml",full.names = TRUE)
 
-mydf <- NULL
 
-for(file in files)
+extract_data <- function(file)
 {
   xml <- read_xml(file)
   collection <- xml_nodes(xml, "collection")
@@ -23,11 +22,14 @@ for(file in files)
   df$Phone <- xml_nodes(x,"phone") %>% xml_text()
   df$Fax <- xml_nodes(x,"fax") %>% xml_text()
   
-  mydf <- rbind(mydf, df)
+  df
 }
 
-mydf <- unique(mydf)
-dennys_df <- mydf[mydf$Country == "US",]
+l = lapply(files, extract_data)
+mydf <- do.call(rbind,l) %>%
+        unique() %>%
+        .[.$Country == "US",]
+dennys_df <- mydf
 save(dennys_df, file = "data/dennys.Rdata")
 
 
